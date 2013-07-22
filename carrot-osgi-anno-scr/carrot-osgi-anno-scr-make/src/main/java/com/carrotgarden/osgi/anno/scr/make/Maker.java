@@ -129,7 +129,13 @@ public class Maker {
 			}
 
 			/** Force class hierarchy initialization. */
-			Class.forName(name, INIT_YES, loader);
+            ClassLoader current = Thread.currentThread().getContextClassLoader();
+            try {
+                Thread.currentThread().setContextClassLoader(loader);
+                Class.forName(name, INIT_YES, loader);
+            } finally {
+                Thread.currentThread().setContextClassLoader(current);
+            }
 
 			klazList.add(klaz);
 
